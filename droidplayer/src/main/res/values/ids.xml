@@ -4,6 +4,10 @@
     <item name="play_progress" type="id"/>
     <item name="current_time" type="id"/>
     <item name="total_time" type="id"/>
+    <item name="back_btn" type="id"/>
+
     <item name="surface" type="id"/>
     <item name="controller" type="id"/>
+    <item name="navigation" type="id"/>
+
 </resources>

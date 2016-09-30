@@ -9,16 +9,21 @@ import android.widget.FrameLayout;
 
 import com.anly.droidplayer.R;
 import com.anly.droidplayer.player.IMediaPlayer;
+import com.anly.droidplayer.player.IPlayerListener;
+
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Created by mingjun on 16/9/29.
  */
 
-public abstract class AbstractPlayerView extends FrameLayout implements IPlayerView {
+public abstract class AbstractPlayerView extends FrameLayout implements IPlayerView, IPlayerListener {
 
     private TextureView mSurface;
-    private AbstractController mController;
+    private AbstractVideoController mController;
     private IMediaPlayer mPlayer;
+
+    private CopyOnWriteArraySet<IController> controllers = new CopyOnWriteArraySet<>();
 
     public AbstractPlayerView(Context context) {
         super(context);
@@ -35,49 +40,49 @@ public abstract class AbstractPlayerView extends FrameLayout implements IPlayerV
         init();
     }
 
-    private void init() {
+    public void init() {
         LayoutInflater.from(getContext()).inflate(getLayoutResId(), this);
         mSurface = (TextureView) findViewById(R.id.surface);
-        mController = (AbstractController) findViewById(R.id.controller);
+        mController = (AbstractVideoController) findViewById(R.id.controller);
     }
 
     public abstract int getLayoutResId();
 
     @Override
     public void setPlayer(IMediaPlayer player) {
+        if (mPlayer != null) {
+            mPlayer.removeListener(this);
+        }
+
         mPlayer = player;
-        setUseController(useController);
+
+        player.addListener(this);
+        setController();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (useController && ev.getActionMasked() == MotionEvent.ACTION_DOWN) {
-            if (mController.isVisible()) {
-                mController.hide();
-            } else {
-                mController.show();
+        if (ev.getActionMasked() == MotionEvent.ACTION_DOWN) {
+
+            for (IController controller : controllers) {
+                if (controller.isVisible()) {
+                    controller.hide();
+                } else {
+                    controller.show();
+                }
             }
         }
         return true;
     }
     @Override
     public boolean onTrackballEvent(MotionEvent ev) {
-        if (!useController) {
-            return false;
-        }
         mController.show();
         return true;
     }
 
-    private boolean useController = true;
-    public void setUseController(boolean useController) {
-        this.useController = useController;
-        if (useController) {
-            mController.setPlayer(mPlayer);
-        } else {
-            mController.hide();
-            mController.setPlayer(null);
-        }
+    public void setController() {
+        controllers.add(mController);
+        mController.setPlayer(mPlayer);
     }
 
     @Override

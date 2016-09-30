@@ -9,6 +9,8 @@ import com.google.android.exoplayer2.Timeline;
 
 public interface IPlayerListener {
 
+    void onPrepared();
+
     void onLoadingChanged(boolean loading);
 
     void onPlayerStateChanged(boolean playWhenReady, int playbackState);
@@ -20,4 +22,6 @@ public interface IPlayerListener {
     void onPositionDiscontinuity();
 
     void onBufferUpdated();
+
+    void onCompleted();
 }

@@ -34,6 +34,8 @@ public class DroidSimpleExoPlayer extends AbstractPlayer {
     private MediaSource mMediaSource;
     private IPlayerView mPlayerView;
 
+    private int mPlayerState;
+
     public DroidSimpleExoPlayer(Context context) {
         mContext = context;
         mHandler = new Handler();
@@ -41,11 +43,16 @@ public class DroidSimpleExoPlayer extends AbstractPlayer {
                 new DefaultTrackSelector(mHandler),
                 new DefaultLoadControl(),
                 null, true);
-        mRealPlayer.setPlayWhenReady(true);
+//        mRealPlayer.setPlayWhenReady(true);
+
+        mPlayerState = mRealPlayer.getPlaybackState();
+        Log.d(TAG, "init state:" + mPlayerState);
+
         mRealPlayer.addListener(new ExoPlayer.EventListener() {
 
             @Override
             public void onLoadingChanged(boolean isLoading) {
+                Log.d(TAG, "isLoading:" + isLoading + ", state:" + mRealPlayer.getPlaybackState());
                 for (IPlayerListener listener : listeners) {
                     listener.onLoadingChanged(isLoading);
                 }
@@ -53,6 +60,20 @@ public class DroidSimpleExoPlayer extends AbstractPlayer {
 
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                int preState = mPlayerState;
+                mPlayerState = playbackState;
+
+                // state from IDLE to BUFFERING / READY means prepared.
+                if (preState == ExoPlayer.STATE_IDLE
+                        && (playbackState == ExoPlayer.STATE_BUFFERING || playbackState == ExoPlayer.STATE_READY)) {
+                    start();
+
+                    for (IPlayerListener listener : listeners) {
+                        Log.d(TAG, "listener:" + listener);
+                        listener.onPrepared();
+                    }
+                }
+
                 for (IPlayerListener listener : listeners) {
                     listener.onPlayerStateChanged(playWhenReady, playbackState);
                 }

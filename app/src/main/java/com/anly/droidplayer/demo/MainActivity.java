@@ -15,21 +15,11 @@ public class MainActivity extends AppCompatActivity {
 
     private DefaultPlayerView mPlayerView;
 
-    private SimpleExoPlayer player;
-    private Handler mainHandler;
-
-    private boolean shouldAutoPlay = true;
-    private boolean shouldRestorePosition;
-    private int playerWindow;
-    private long playerPosition;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mainHandler = new Handler();
         mPlayerView = (DefaultPlayerView) findViewById(R.id.player_view);
     }
 
@@ -45,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if ((Util.SDK_INT <= 23 || player == null)) {
+        if ((Util.SDK_INT <= 23 || mPlayer == null)) {
             initializePlayer();
         }
     }
@@ -79,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         mPlayer.attachPlayerView(mPlayerView);
 
-        Uri uri = Uri.parse("http://source.hotbody.cn/Vy9qmQU8-QTZG-nx2o-PXZX-luKK9xGLDwga.mp4");
+        Uri uri = Uri.parse("http://video.jiecao.fm/8/18/%E5%A4%A7%E5%AD%A6.mp4");
         mPlayer.setDataSource(uri);
 
         mPlayer.prepare();

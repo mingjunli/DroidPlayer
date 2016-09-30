@@ -23,7 +23,7 @@ import com.google.android.exoplayer2.Timeline;
  * Created by mingjun on 16/9/29.
  */
 
-public abstract class AbstractController extends FrameLayout implements IController {
+public abstract class AbstractVideoController extends FrameLayout implements IController {
 
     private static final int PROGRESS_BAR_MAX = 1000;
     private static final String TAG = "AbstractController";
@@ -40,17 +40,17 @@ public abstract class AbstractController extends FrameLayout implements IControl
     private int showDurationMs = DEFAULT_SHOW_DURATION_MS;
     private boolean dragging;
 
-    public AbstractController(Context context) {
+    public AbstractVideoController(Context context) {
         super(context);
         init();
     }
 
-    public AbstractController(Context context, AttributeSet attrs) {
+    public AbstractVideoController(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public AbstractController(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AbstractVideoController(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -71,7 +71,6 @@ public abstract class AbstractController extends FrameLayout implements IControl
         mProgress.setOnSeekBarChangeListener(mControllerListener);
     }
 
-    @Override
     public void setPlayer(IMediaPlayer player) {
         Log.d(TAG, "setPlayer");
         this.mPlayer = player;
@@ -119,6 +118,11 @@ public abstract class AbstractController extends FrameLayout implements IControl
             hideDeferred();
         }
 
+        @Override
+        public void onPrepared() {
+
+        }
+
         // ExoPlayer
         @Override
         public void onLoadingChanged(boolean isLoading) {
@@ -153,15 +157,19 @@ public abstract class AbstractController extends FrameLayout implements IControl
         public void onBufferUpdated() {
 
         }
+
+        @Override
+        public void onCompleted() {
+
+        }
     }
 
-    /**
-     * Returns whether the controller is currently visible.
-     */
+    @Override
     public boolean isVisible() {
         return getVisibility() == VISIBLE;
     }
 
+    @Override
     public void show() {
         show(showDurationMs);
     }
@@ -178,9 +186,7 @@ public abstract class AbstractController extends FrameLayout implements IControl
         hideDeferred();
     }
 
-    /**
-     * Hides the controller.
-     */
+    @Override
     public void hide() {
         setVisibility(GONE);
         removeCallbacks(updateProgressAction);
@@ -209,7 +215,6 @@ public abstract class AbstractController extends FrameLayout implements IControl
         }
 
         long bufferedPosition = mPlayer == null ? 0 : mPlayer.getBufferedPosition();
-        Log.d(TAG, "updateProgress, bufferedPosition:" + bufferedPosition);
 
         mProgress.setSecondaryProgress(progressBarValue(bufferedPosition));
 

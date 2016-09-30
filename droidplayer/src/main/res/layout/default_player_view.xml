@@ -9,12 +9,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
+        android:layout_centerInParent="true"/>
+
     <com.anly.droidplayer.view.DefaultController
         android:id="@id/controller"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"/>
 
-    </com.anly.droidplayer.view.DefaultController>
+    <com.anly.droidplayer.view.DefaultNavigation
+        android:id="@id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"/>
 
 </RelativeLayout>

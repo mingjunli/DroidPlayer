@@ -9,7 +9,7 @@ import com.anly.droidplayer.R;
  * Created by mingjun on 16/9/29.
  */
 
-public class DefaultController extends AbstractController {
+public class DefaultController extends AbstractVideoController {
 
     public DefaultController(Context context) {
         super(context);

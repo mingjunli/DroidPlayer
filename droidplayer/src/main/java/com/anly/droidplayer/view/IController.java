@@ -22,5 +22,9 @@ public interface IController {
         void onVisibilityChange(int visibility);
     }
 
-    void setPlayer(IMediaPlayer player);
+    void show();
+
+    void hide();
+
+    boolean isVisible();
 }
