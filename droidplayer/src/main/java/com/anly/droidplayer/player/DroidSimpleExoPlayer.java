@@ -4,13 +4,15 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
-import android.view.TextureView;
 
 import com.anly.droidplayer.Utils;
 import com.anly.droidplayer.view.IPlayerView;
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -30,7 +32,7 @@ public class DroidSimpleExoPlayer extends AbstractPlayer {
 
     private Context mContext;
     private MediaSource mMediaSource;
-    private TextureView mSurface;
+    private IPlayerView mPlayerView;
 
     public DroidSimpleExoPlayer(Context context) {
         mContext = context;
@@ -40,6 +42,43 @@ public class DroidSimpleExoPlayer extends AbstractPlayer {
                 new DefaultLoadControl(),
                 null, true);
         mRealPlayer.setPlayWhenReady(true);
+        mRealPlayer.addListener(new ExoPlayer.EventListener() {
+
+            @Override
+            public void onLoadingChanged(boolean isLoading) {
+                for (IPlayerListener listener : listeners) {
+                    listener.onLoadingChanged(isLoading);
+                }
+            }
+
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                for (IPlayerListener listener : listeners) {
+                    listener.onPlayerStateChanged(playWhenReady, playbackState);
+                }
+            }
+
+            @Override
+            public void onTimelineChanged(Timeline timeline, Object manifest) {
+                for (IPlayerListener listener : listeners) {
+                    listener.onTimelineChanged(timeline, manifest);
+                }
+            }
+
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+                for (IPlayerListener listener : listeners) {
+                    listener.onPlayerError(error);
+                }
+            }
+
+            @Override
+            public void onPositionDiscontinuity() {
+                for (IPlayerListener listener : listeners) {
+                    listener.onPositionDiscontinuity();
+                }
+            }
+        });
     }
 
     @Override
@@ -57,8 +96,8 @@ public class DroidSimpleExoPlayer extends AbstractPlayer {
             throw new IllegalStateException("Should set data source first!!!");
         }
 
-        if (!Utils.checkNotNull(mSurface)) {
-            throw new IllegalStateException("The IPlayerView can not be null, please call setPlayerView first!!!");
+        if (!Utils.checkNotNull(mPlayerView)) {
+            throw new IllegalStateException("The IPlayerView can not be null, please call attachPlayerView() first!!!");
         }
 
         Log.d(TAG, "prepare");
@@ -68,12 +107,12 @@ public class DroidSimpleExoPlayer extends AbstractPlayer {
 
     @Override
     public void start() throws IllegalStateException {
-
+        mRealPlayer.setPlayWhenReady(true);
     }
 
     @Override
     public void pause() throws IllegalStateException {
-
+        mRealPlayer.setPlayWhenReady(false);
     }
 
     @Override
@@ -82,18 +121,28 @@ public class DroidSimpleExoPlayer extends AbstractPlayer {
     }
 
     @Override
-    public void seekTo(long var1) throws IllegalStateException {
-
+    public void seekTo(long position) throws IllegalStateException {
+        mRealPlayer.seekTo(position);
     }
 
     @Override
     public long getCurrentPosition() {
-        return 0;
+        return mRealPlayer.getCurrentPosition();
+    }
+
+    @Override
+    public long getBufferedPosition() {
+        return mRealPlayer.getBufferedPosition();
+    }
+
+    @Override
+    public int getPlaybackState() {
+        return mRealPlayer.getPlaybackState();
     }
 
     @Override
     public long getDuration() {
-        return 0;
+        return mRealPlayer.getDuration();
     }
 
     @Override
@@ -107,8 +156,17 @@ public class DroidSimpleExoPlayer extends AbstractPlayer {
     }
 
     @Override
-    public void setPlayerView(IPlayerView playerView) {
-        mSurface = playerView.getSurface();
-        mRealPlayer.setVideoTextureView(mSurface);
+    public boolean isPlaying() {
+        return mRealPlayer.getPlayWhenReady();
+    }
+
+    @Override
+    public void attachPlayerView(IPlayerView playerView) {
+        mPlayerView = playerView;
+
+        if (playerView != null) {
+            playerView.setPlayer(this);
+            mRealPlayer.setVideoTextureView(playerView.getSurface());
+        }
     }
 }

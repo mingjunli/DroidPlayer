@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
+    android:gravity="center_vertical"
     android:background="#CC000000"
     android:orientation="horizontal"
     android:paddingLeft="20dp"
@@ -13,37 +14,36 @@
         android:id="@id/play"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:scaleType="centerInside"/>
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_pause"/>
 
     <TextView
         android:id="@id/current_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="20dp"
         android:paddingEnd="4dp"
         android:paddingStart="4dp"
-        android:paddingTop="4dp"
         android:textColor="#FFBEBEBE"
         android:textSize="14sp"
         android:textStyle="bold"/>
 
     <SeekBar
         android:id="@id/play_progress"
-        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_gravity="center_vertical"/>
+        android:progressDrawable="@drawable/progress_bg"
+        android:thumb="@drawable/seek_thumb"
+        android:minHeight="5dp"
+        android:maxHeight="5dp"
+        />
 
     <TextView
         android:id="@id/total_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:paddingEnd="4dp"
         android:paddingStart="4dp"
-        android:paddingTop="4dp"
         android:textColor="#FFBEBEBE"
         android:textSize="14sp"
         android:textStyle="bold"/>

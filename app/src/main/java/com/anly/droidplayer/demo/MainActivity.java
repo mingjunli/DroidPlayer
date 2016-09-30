@@ -11,8 +11,6 @@ import com.anly.droidplayer.view.DefaultPlayerView;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.util.Util;
 
-import java.io.IOException;
-
 public class MainActivity extends AppCompatActivity {
 
     private DefaultPlayerView mPlayerView;
@@ -79,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             mPlayer = PlayerFactory.newExoPlayerInstance(this);
         }
 
-        mPlayer.setPlayerView(mPlayerView);
+        mPlayer.attachPlayerView(mPlayerView);
 
         Uri uri = Uri.parse("http://source.hotbody.cn/Vy9qmQU8-QTZG-nx2o-PXZX-luKK9xGLDwga.mp4");
         mPlayer.setDataSource(uri);

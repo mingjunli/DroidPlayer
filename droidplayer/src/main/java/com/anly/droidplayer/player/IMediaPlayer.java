@@ -1,11 +1,8 @@
 package com.anly.droidplayer.player;
 
 import android.net.Uri;
-import android.view.TextureView;
 
 import com.anly.droidplayer.view.IPlayerView;
-
-import java.io.IOException;
 
 /**
  * Created by mingjun on 16/9/29.
@@ -27,11 +24,20 @@ public interface IMediaPlayer {
 
     long getCurrentPosition();
 
+    long getBufferedPosition();
+
+    int getPlaybackState();
+
     long getDuration();
 
     void release();
 
     void reset();
 
-    void setPlayerView(IPlayerView playerView);
+    boolean isPlaying();
+
+    void attachPlayerView(IPlayerView playerView);
+
+    void addListener(IPlayerListener listener);
+    void removeListener(IPlayerListener listener);
 }

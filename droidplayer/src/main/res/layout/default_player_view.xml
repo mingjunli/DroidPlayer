@@ -10,9 +10,10 @@
         android:layout_height="match_parent"/>
 
     <com.anly.droidplayer.view.DefaultController
-        android:id=""
+        android:id="@id/controller"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
 
     </com.anly.droidplayer.view.DefaultController>
 

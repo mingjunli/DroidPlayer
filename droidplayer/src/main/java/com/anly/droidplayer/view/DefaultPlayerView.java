@@ -9,7 +9,7 @@ import com.anly.droidplayer.R;
  * Created by mingjun on 16/9/29.
  */
 
-public class DefaultPlayerView extends BasePlayerView {
+public class DefaultPlayerView extends AbstractPlayerView {
 
     public DefaultPlayerView(Context context) {
         super(context);

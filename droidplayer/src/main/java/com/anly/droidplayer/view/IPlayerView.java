@@ -13,6 +13,4 @@ public interface IPlayerView {
     void setPlayer(IMediaPlayer player);
 
     TextureView getSurface();
-
-    IController getController();
 }
