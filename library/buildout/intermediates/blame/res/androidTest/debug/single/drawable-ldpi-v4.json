@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "/Users/mingjun/Dev/open-source/ExoPlayer/library/buildout/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ic_media_ff.png",
+        "source": "/Users/mingjun/Dev/open-source/ExoPlayer/library/buildout/intermediates/bundles/debug/res/drawable-ldpi-v4/ic_media_ff.png"
+    },
+    {
+        "merged": "/Users/mingjun/Dev/open-source/ExoPlayer/library/buildout/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ic_media_play.png",
+        "source": "/Users/mingjun/Dev/open-source/ExoPlayer/library/buildout/intermediates/bundles/debug/res/drawable-ldpi-v4/ic_media_play.png"
+    },
+    {
+        "merged": "/Users/mingjun/Dev/open-source/ExoPlayer/library/buildout/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ic_media_pause.png",
+        "source": "/Users/mingjun/Dev/open-source/ExoPlayer/library/buildout/intermediates/bundles/debug/res/drawable-ldpi-v4/ic_media_pause.png"
+    },
+    {
+        "merged": "/Users/mingjun/Dev/open-source/ExoPlayer/library/buildout/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ic_media_previous.png",
+        "source": "/Users/mingjun/Dev/open-source/ExoPlayer/library/buildout/intermediates/bundles/debug/res/drawable-ldpi-v4/ic_media_previous.png"
+    },
+    {
+        "merged": "/Users/mingjun/Dev/open-source/ExoPlayer/library/buildout/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ic_media_next.png",
+        "source": "/Users/mingjun/Dev/open-source/ExoPlayer/library/buildout/intermediates/bundles/debug/res/drawable-ldpi-v4/ic_media_next.png"
+    },
+    {
+        "merged": "/Users/mingjun/Dev/open-source/ExoPlayer/library/buildout/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ic_media_rew.png",
+        "source": "/Users/mingjun/Dev/open-source/ExoPlayer/library/buildout/intermediates/bundles/debug/res/drawable-ldpi-v4/ic_media_rew.png"
+    }
+]
