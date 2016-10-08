@@ -54,7 +54,6 @@ public abstract class AbstractPlayerView extends FrameLayout implements IPlayerV
     public void init() {
         LayoutInflater.from(getContext()).inflate(getLayoutResId(), this);
         mSurface = (ScalableTextureView) findViewById(R.id.surface);
-        mSurface.setScaleType(ScalableType.CENTER_CROP);
         mController = (AbstractVideoController) findViewById(R.id.controller);
     }
 
