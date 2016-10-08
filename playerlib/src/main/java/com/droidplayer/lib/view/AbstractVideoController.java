@@ -147,6 +147,11 @@ public abstract class AbstractVideoController extends AbstractController {
         public void onCompleted() {
 
         }
+
+        @Override
+        public void onVideoSizeChanged(int width, int height) {
+
+        }
     }
 
     private void updateProgress() {

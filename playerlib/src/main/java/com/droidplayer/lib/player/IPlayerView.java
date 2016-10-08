@@ -2,8 +2,6 @@ package com.droidplayer.lib.player;
 
 import android.view.TextureView;
 
-import com.droidplayer.lib.scale.ScalableTextureView;
-
 /**
  * Created by mingjun on 16/9/29.
  */

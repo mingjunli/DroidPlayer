@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         mPlayer.attachPlayerView(mPlayerView);
 
-        Uri uri = Uri.parse("http://video.jiecao.fm/8/18/%E5%A4%A7%E5%AD%A6.mp4");
+        Uri uri = Uri.parse("http://video.jiecao.fm/8/16/%E4%BF%AF%E5%8D%A7%E6%92%91.mp4");
         mPlayer.setDataSource(uri);
 
         mPlayer.prepare();

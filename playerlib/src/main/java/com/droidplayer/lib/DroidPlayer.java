@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Surface;
 
 import com.droidplayer.lib.player.AbstractPlayer;
 import com.droidplayer.lib.player.IPlayerListener;
@@ -16,6 +17,7 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -103,6 +105,25 @@ public class DroidPlayer extends AbstractPlayer {
 
             @Override
             public void onPositionDiscontinuity() {
+            }
+        });
+
+        mRealPlayer.setVideoListener(new SimpleExoPlayer.VideoListener() {
+            @Override
+            public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+                for (IPlayerListener listener : listeners) {
+                    listener.onVideoSizeChanged(width, height);
+                }
+            }
+
+            @Override
+            public void onRenderedFirstFrame(Surface surface) {
+
+            }
+
+            @Override
+            public void onVideoDisabled(DecoderCounters counters) {
+
             }
         });
     }

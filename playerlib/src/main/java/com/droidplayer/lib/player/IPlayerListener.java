@@ -17,4 +17,6 @@ public interface IPlayerListener {
     void onBufferUpdated(int percent);
 
     void onCompleted();
+
+    void onVideoSizeChanged(int width, int height);
 }

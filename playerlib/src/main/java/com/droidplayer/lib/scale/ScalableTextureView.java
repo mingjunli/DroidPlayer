@@ -1,9 +1,14 @@
 package com.droidplayer.lib.scale;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Matrix;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
+
+import com.droidplayer.lib.R;
 
 /**
  * Created by mingjun on 16/10/8.
@@ -11,132 +16,60 @@ import android.view.View;
 
 public class ScalableTextureView extends TextureView {
 
-    private int mScaleType;
+    private static final String TAG = "ScalableTextureView";
+    private ScalableType mScaleType;
 
     private int mVideoWidth;
     private int mVideoHeight;
 
     public ScalableTextureView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public ScalableTextureView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public ScalableTextureView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        if (attrs == null) {
+            return;
+        }
+
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.scaleStyle, 0, 0);
+        if (a == null) {
+            return;
+        }
+
+        int scaleType = a.getInt(R.styleable.scaleStyle_scalableType, ScalableType.NONE.ordinal());
+        mScaleType = ScalableType.values()[scaleType];
+
+        a.recycle();
     }
 
-    public void setScaleType(@ScaleType.ScaleTypeDef int scaleType) {
+    public void setScaleType(ScalableType scaleType) {
         this.mScaleType = scaleType;
     }
 
     public void setVideoSize(int videoWidth, int videoHeight) {
         mVideoWidth = videoWidth;
         mVideoHeight = videoHeight;
+
+        scaleVideoSize(videoWidth, videoHeight);
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-        int viewRotation = (int) getRotation();
-        // 如果判断成立，则说明显示的TextureView和本身的位置是有90度的旋转的，所以需要交换宽高参数。
-        if (viewRotation == 90 || viewRotation == 270) {
-            int tempMeasureSpec = widthMeasureSpec;
-            widthMeasureSpec = heightMeasureSpec;
-            heightMeasureSpec = tempMeasureSpec;
+    private void scaleVideoSize(int videoWidth, int videoHeight) {
+        if (videoWidth == 0 || videoHeight == 0) {
+            return;
         }
 
-        int width = getDefaultSize(mVideoWidth, widthMeasureSpec);
-        int height = getDefaultSize(mVideoHeight, heightMeasureSpec);
-
-        if (mScaleType == ScaleType.FIT_XY) {
-            width = widthMeasureSpec;
-            height = heightMeasureSpec;
+        Size viewSize = new Size(getWidth(), getHeight());
+        Size videoSize = new Size(videoWidth, videoHeight);
+        ScaleManager scaleManager = new ScaleManager(viewSize, videoSize);
+        Matrix matrix = scaleManager.getScaleMatrix(mScaleType);
+        if (matrix != null) {
+            setTransform(matrix);
         }
-        else if (mVideoWidth > 0 && mVideoHeight > 0) {
-
-            int widthSpecMode = View.MeasureSpec.getMode(widthMeasureSpec);
-            int widthSpecSize = View.MeasureSpec.getSize(widthMeasureSpec);
-            int heightSpecMode = View.MeasureSpec.getMode(heightMeasureSpec);
-            int heightSpecSize = View.MeasureSpec.getSize(heightMeasureSpec);
-
-            if (widthSpecMode == View.MeasureSpec.AT_MOST
-                    && heightSpecMode == View.MeasureSpec.AT_MOST) {
-
-                float specAspectRatio = (float) widthSpecSize
-                        / (float) heightSpecSize;
-                float displayAspectRatio;
-
-                switch (mScaleType) {
-                    case ScaleType.SCALE_16_9:
-                        displayAspectRatio = 16.0f / 9.0f;
-                        if (viewRotation == 90
-                                || viewRotation == 270) {
-                            displayAspectRatio = 1.0f / displayAspectRatio;
-                        }
-                        break;
-
-                    case ScaleType.SCALE_4_3:
-                        displayAspectRatio = 4.0f / 3.0f;
-                        if (viewRotation == 90
-                                || viewRotation == 270) {
-                            displayAspectRatio = 1.0f / displayAspectRatio;
-                        }
-                        break;
-
-                    case ScaleType.CENTER_CROP:
-                    case ScaleType.CENTER_INSIDE:
-                    default:
-                        displayAspectRatio = (float) mVideoWidth
-                                / (float) mVideoHeight;
-                }
-
-                boolean widthBigger = displayAspectRatio > specAspectRatio;
-
-                switch (mScaleType) {
-                    case ScaleType.SCALE_16_9:
-                    case ScaleType.SCALE_4_3:
-                        if (widthBigger) {
-                            // too wide, fix width
-                            width = widthSpecSize;
-                            height = (int) (width / displayAspectRatio);
-                        } else {
-                            // too high, fix height
-                            height = heightSpecSize;
-                            width = (int) (height * displayAspectRatio);
-                        }
-                        break;
-
-                    case ScaleType.CENTER_CROP:
-                        if (widthBigger) {
-                            // not high enough, fix height
-                            height = heightSpecSize;
-                            width = (int) (height * displayAspectRatio);
-                        } else {
-                            // not wide enough, fix width
-                            width = widthSpecSize;
-                            height = (int) (width / displayAspectRatio);
-                        }
-                        break;
-
-                    case ScaleType.CENTER_INSIDE:
-                    default:
-                        if (widthBigger) {
-                            // too wide, fix width
-                            width = Math.min(mVideoWidth, widthSpecSize);
-                            height = (int) (width / displayAspectRatio);
-                        } else {
-                            // too high, fix height
-                            height = Math.min(mVideoHeight, heightSpecSize);
-                            width = (int) (height * displayAspectRatio);
-                        }
-                        break;
-                }
-            }
-        }
-
-        setMeasuredDimension(width, height);
     }
 }

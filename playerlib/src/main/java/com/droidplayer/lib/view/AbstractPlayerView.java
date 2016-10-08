@@ -13,8 +13,8 @@ import com.droidplayer.lib.player.IMediaPlayer;
 import com.droidplayer.lib.player.IPlayerListener;
 import com.droidplayer.lib.player.IPlayerView;
 import com.droidplayer.lib.player.PlaybackException;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.Timeline;
+import com.droidplayer.lib.scale.ScalableTextureView;
+import com.droidplayer.lib.scale.ScalableType;
 
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -28,7 +28,7 @@ public abstract class AbstractPlayerView extends FrameLayout implements IPlayerV
 
     public static final int DEFAULT_SHOW_DURATION_MS = 3000;
 
-    private TextureView mSurface;
+    private ScalableTextureView mSurface;
     private AbstractVideoController mController;
     private IMediaPlayer mPlayer;
 
@@ -53,7 +53,8 @@ public abstract class AbstractPlayerView extends FrameLayout implements IPlayerV
 
     public void init() {
         LayoutInflater.from(getContext()).inflate(getLayoutResId(), this);
-        mSurface = (TextureView) findViewById(R.id.surface);
+        mSurface = (ScalableTextureView) findViewById(R.id.surface);
+        mSurface.setScaleType(ScalableType.CENTER_CROP);
         mController = (AbstractVideoController) findViewById(R.id.controller);
     }
 
@@ -166,5 +167,13 @@ public abstract class AbstractPlayerView extends FrameLayout implements IPlayerV
     @Override
     public void onCompleted() {
         showControllers(0);
+    }
+
+
+    @Override
+    public void onVideoSizeChanged(int width, int height) {
+        if (width > 0 && height > 0) {
+            mSurface.setVideoSize(width, height);
+        }
     }
 }
