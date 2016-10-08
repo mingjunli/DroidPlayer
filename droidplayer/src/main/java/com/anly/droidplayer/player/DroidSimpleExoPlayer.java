@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.anly.droidplayer.Utils;
-import com.anly.droidplayer.view.IPlayerView;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -60,6 +59,7 @@ public class DroidSimpleExoPlayer extends AbstractPlayer {
 
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                Log.d(TAG, "onPlayerStateChanged:" + playWhenReady + ", state:" + playbackState);
                 int preState = mPlayerState;
                 mPlayerState = playbackState;
 
@@ -71,6 +71,13 @@ public class DroidSimpleExoPlayer extends AbstractPlayer {
                     for (IPlayerListener listener : listeners) {
                         Log.d(TAG, "listener:" + listener);
                         listener.onPrepared();
+                    }
+                }
+
+                // completed
+                if (playbackState == ExoPlayer.STATE_ENDED) {
+                    for (IPlayerListener listener : listeners) {
+                        listener.onCompleted();
                     }
                 }
 
@@ -178,7 +185,7 @@ public class DroidSimpleExoPlayer extends AbstractPlayer {
 
     @Override
     public boolean isPlaying() {
-        return mRealPlayer.getPlayWhenReady();
+        return mRealPlayer.getPlayWhenReady() && mRealPlayer.getPlaybackState() != ExoPlayer.STATE_ENDED;
     }
 
     @Override

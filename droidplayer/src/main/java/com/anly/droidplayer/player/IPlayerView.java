@@ -1,4 +1,4 @@
-package com.anly.droidplayer.view;
+package com.anly.droidplayer.player;
 
 import android.view.TextureView;
 
@@ -12,5 +12,11 @@ public interface IPlayerView {
 
     void setPlayer(IMediaPlayer player);
 
+    void addController(IController controller);
+
+    void showControllers();
+    void hideControllers();
+
     TextureView getSurface();
+
 }

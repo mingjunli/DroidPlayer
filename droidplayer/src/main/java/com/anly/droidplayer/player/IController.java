@@ -1,4 +1,4 @@
-package com.anly.droidplayer.view;
+package com.anly.droidplayer.player;
 
 import android.view.View;
 

@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.anly.droidplayer.R;
 import com.anly.droidplayer.Utils;
+import com.anly.droidplayer.player.AbstractController;
+import com.anly.droidplayer.player.IController;
 import com.anly.droidplayer.player.IPlayerListener;
 import com.anly.droidplayer.player.IMediaPlayer;
 import com.google.android.exoplayer2.C;
@@ -23,7 +25,7 @@ import com.google.android.exoplayer2.Timeline;
  * Created by mingjun on 16/9/29.
  */
 
-public abstract class AbstractVideoController extends FrameLayout implements IController {
+public abstract class AbstractVideoController extends AbstractController {
 
     private static final int PROGRESS_BAR_MAX = 1000;
     private static final String TAG = "AbstractController";
@@ -36,8 +38,6 @@ public abstract class AbstractVideoController extends FrameLayout implements ICo
     private IMediaPlayer mPlayer;
     private ControllerListener mControllerListener;
 
-    public static final int DEFAULT_SHOW_DURATION_MS = 5000;
-    private int showDurationMs = DEFAULT_SHOW_DURATION_MS;
     private boolean dragging;
 
     public AbstractVideoController(Context context) {
@@ -107,7 +107,7 @@ public abstract class AbstractVideoController extends FrameLayout implements ICo
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-            removeCallbacks(hideAction);
+            mPlayer.pause();
             dragging = true;
         }
 
@@ -115,7 +115,7 @@ public abstract class AbstractVideoController extends FrameLayout implements ICo
         public void onStopTrackingTouch(SeekBar seekBar) {
             dragging = false;
             mPlayer.seekTo(positionValue(seekBar.getProgress()));
-            hideDeferred();
+            mPlayer.start();
         }
 
         @Override
@@ -161,42 +161,6 @@ public abstract class AbstractVideoController extends FrameLayout implements ICo
         @Override
         public void onCompleted() {
 
-        }
-    }
-
-    @Override
-    public boolean isVisible() {
-        return getVisibility() == VISIBLE;
-    }
-
-    @Override
-    public void show() {
-        show(showDurationMs);
-    }
-
-    /**
-     * Shows the controller for the {@code durationMs}. If {@code durationMs} is 0 the controller is
-     * shown until {@link #hide()} is called.
-     *
-     * @param durationMs The duration in milliseconds.
-     */
-    public void show(int durationMs) {
-        setVisibility(VISIBLE);
-        showDurationMs = durationMs;
-        hideDeferred();
-    }
-
-    @Override
-    public void hide() {
-        setVisibility(GONE);
-        removeCallbacks(updateProgressAction);
-        removeCallbacks(hideAction);
-    }
-
-    private void hideDeferred() {
-        removeCallbacks(hideAction);
-        if (showDurationMs > 0) {
-            postDelayed(hideAction, showDurationMs);
         }
     }
 
@@ -257,13 +221,6 @@ public abstract class AbstractVideoController extends FrameLayout implements ICo
         @Override
         public void run() {
             updateProgress();
-        }
-    };
-
-    private final Runnable hideAction = new Runnable() {
-        @Override
-        public void run() {
-            hide();
         }
     };
 

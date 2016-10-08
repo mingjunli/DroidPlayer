@@ -2,8 +2,6 @@ package com.anly.droidplayer.player;
 
 import android.net.Uri;
 
-import com.anly.droidplayer.view.IPlayerView;
-
 /**
  * Created by mingjun on 16/9/29.
  */

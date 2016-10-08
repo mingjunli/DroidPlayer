@@ -5,16 +5,16 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.anly.droidplayer.R;
+import com.anly.droidplayer.player.AbstractController;
 
 /**
  * Created by mingjun on 16/9/30.
  */
 
-public abstract class AbstractNavigation extends FrameLayout implements INavigation {
+public abstract class AbstractNavigation extends AbstractController {
 
     private ImageView mBackBtn;
 
@@ -49,18 +49,6 @@ public abstract class AbstractNavigation extends FrameLayout implements INavigat
         if (getContext() instanceof Activity) {
             ((Activity)getContext()).onBackPressed();
         }
-    }
-
-    public boolean isVisible() {
-        return getVisibility() == VISIBLE;
-    }
-
-    public void show() {
-        setVisibility(VISIBLE);
-    }
-
-    public void hide() {
-        setVisibility(GONE);
     }
 
     public abstract int getLayoutResId();
