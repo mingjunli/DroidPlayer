@@ -1,1 +1,1 @@
-include ':app', ':droidplayer', 'library'
+include ':app', ':playerlib', 'library'

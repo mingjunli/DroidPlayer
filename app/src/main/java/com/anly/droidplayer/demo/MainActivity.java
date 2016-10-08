@@ -1,14 +1,12 @@
 package com.anly.droidplayer.demo;
 
 import android.net.Uri;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import com.anly.droidplayer.PlayerFactory;
-import com.anly.droidplayer.player.IMediaPlayer;
-import com.anly.droidplayer.view.DefaultPlayerView;
-import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.droidplayer.lib.DroidPlayer;
+import com.droidplayer.lib.player.IMediaPlayer;
+import com.droidplayer.lib.view.DefaultPlayerView;
 import com.google.android.exoplayer2.util.Util;
 
 public class MainActivity extends AppCompatActivity {
@@ -64,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private IMediaPlayer mPlayer;
     private void initializePlayer() {
         if (mPlayer == null) {
-            mPlayer = PlayerFactory.newExoPlayerInstance(this);
+            mPlayer = new DroidPlayer(this);
         }
 
         mPlayer.attachPlayerView(mPlayerView);
